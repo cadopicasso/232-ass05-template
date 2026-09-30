@@ -2,7 +2,7 @@
 // CSCI 232 Assignment 05 – Evolution of Data Structures
 // Student Implementation
 // ============================================================
-// Author: [Your Name Here]
+// Author: Caden Johns
 // ============================================================
 
 #include "code.hpp"
@@ -21,8 +21,20 @@
 /// default -> "unknown"
 
 std::string printLegacyData(LegacyData data, char type) {
-    // TODO: Implement switch/case for 'i', 'd', 'c' and default case
-    return "";
+    switch(type){
+        case 'i':
+            return std::format("{}",data.i);
+        case 'd':
+            return std::format("{}",data.d);
+        case 'c':
+            if (data.cPtr=NULL){
+                return "nullptr";
+            }
+            return std::format("{}",data.cPtr);
+        default:
+            return "unknown";
+    }
+    
 }
 
 // ============================================================
@@ -31,7 +43,9 @@ std::string printLegacyData(LegacyData data, char type) {
 
 /// Initializes a structNode with value, type indicator, and nullptr nextPtr.
 void initStructNode(structNode* nPtr, LegacyData val, char type) {
-    // TODO: Check if nPtr is nullptr before assigning fields
+    nPtr->value=val;
+    nPtr->typeData=type;
+    nPtr->nextPtr=NULL;
 }
 
 /// Dynamically allocates two structNodes.
@@ -40,8 +54,17 @@ void initStructNode(structNode* nPtr, LegacyData val, char type) {
 /// Links Node 1 -> Node 2 -> nullptr
 /// Returns pointer to Node 1.
 structNode* createTwoStructNodes() {
-    // TODO: Allocate dynamically using new, initialize both nodes, link them, and return head
-    return nullptr;
+    structNode *node1Ptr = new structNode;
+    LegacyData n1;
+    n1.i=5;
+    initStructNode(node1Ptr,n1,'i');
+    structNode *node2Ptr = new structNode;
+    LegacyData n2;
+    n2.d=3.14;
+    initStructNode(node1Ptr,n2,'d');
+
+    node1Ptr->nextPtr=node2Ptr;
+    return node1Ptr;
 }
 
 // ============================================================

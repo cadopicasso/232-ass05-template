@@ -15,14 +15,18 @@
 /// Verify the returned string matches "42".
 void test_printLegacyData_int(void) 
 {
-    TEST_ASSERT_TRUE_MESSAGE(0, "TODO: Implement this test");
+    LegacyData lD;
+    lD.i=1;
+    TEST_ASSERT_TRUE_MESSAGE("1"==printLegacyData(lD,'i'),"Failed test_printLegacyData_int");
 }
 
 /// Create a LegacyData union with a double (3.14). Call printLegacyData.
 /// Verify the returned string matches "3.14".
 void test_printLegacyData_double(void) 
 {
-    TEST_ASSERT_TRUE_MESSAGE(0, "TODO: Implement this test");
+    LegacyData lD;
+    lD.d=1.03;
+    TEST_ASSERT_TRUE_MESSAGE("1.03"==printLegacyData(lD,'d'),"Failed test_printLegacyData_double");
 }
 
 // ============================================================
@@ -34,7 +38,10 @@ void test_printLegacyData_double(void)
 /// Clean up allocated memory.
 void test_createTwoStructNodes_links_correctly(void) 
 {
-    TEST_ASSERT_TRUE_MESSAGE(0, "TODO: Implement this test");
+    structNode* head=createTwoStructNodes();
+    std::cout<<printLegacyData(head->value,'i')<<std::endl;
+    TEST_ASSERT_TRUE_MESSAGE(printLegacyData(head->value,'i')=="1", "Failed test_createTwoStructNodes_links_correctly Test 1");
+    TEST_ASSERT_TRUE_MESSAGE(printLegacyData(head->nextPtr->value,'d')=="3.14", "Failed test_createTwoStructNodes_links_correctly Test 2");
 }
 
 // ============================================================

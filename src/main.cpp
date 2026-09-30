@@ -1,10 +1,25 @@
 
 #include <stdio.h>
 
+#include <iostream>
+#include <format>
+
 #ifndef UNITY_H
 #define UNITY_H
 #include "unity.h"
 #endif
+
+std::string AUTHOR_NAME       = "Caden Johns";
+std::string AUTHOR_AUTHORSHIP = "I acknowledge that I have worked on this "
+"assignment independently, except where explicitly noted and referenced. "
+"Any collaboration or use of external resources has been properly cited. "
+"I am fully aware of the consequences of academic dishonesty and agree "
+"to abide by the university's academic integrity policy.";
+
+
+//std::string formatted_str = std::format("My name is {} and my favorite number is {}", name,num);
+
+
 
 // ============================================================
 // Test Declarations — implemented in tests.cpp

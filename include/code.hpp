@@ -61,11 +61,11 @@ structNode* createTwoStructNodes();
 class classNode {
 public:
     // TODO: Define members and constructor
-    // LegacyData value;
-    // classNode* nextPtr;
-    // char typeData;
+    LegacyData value;
+    classNode* nextPtr;
+    char typeData;
 
-    // classNode(LegacyData val, char type);
+    classNode(LegacyData val, char type);
 };
 
 /// Creates two dynamically allocated classNode objects linked together.
@@ -105,31 +105,32 @@ using ModernData = std::variant<int, double, std::string>;
 /// A modern C++17 linked list node using std::variant for type-safe storage.
 class classNodeVariant {
 public:
-    // ModernData value;
-    // classNodeVariant* nextPtr;
+    ModernData value;
+    classNodeVariant* nextPtr;
 
-    // /// Constructor using member initializer list.
-    // classNodeVariant(ModernData d) : value(d), nextPtr(nullptr) {}
+    // Constructor using member initializer list.
+    classNodeVariant(ModernData d) : value(d), nextPtr(nullptr) {}
 };
 
 /// A fully encapsulated linked list manager for classNodeVariant objects.
 /// YOUR TASK: Declare private members (headPtr, counter) and public methods.
 class LinkedList {
-// private:
-//     // TODO: Add headPtr (classNodeVariant*) and counter (int)
+ private:
+    classNodeVariant* headPtr;
+    int counter;
 
-// public:
-//     LinkedList();
-//     ~LinkedList();
+ public:
+     LinkedList();
+     ~LinkedList();
 
-//     void destroyList();
-//     int addFirst(classNodeVariant* newNodePtr);
-//     int addLast(classNodeVariant* newNodePtr);
-//     int deleteFirst();
-//     int deleteLast();
-//     int deleteValue(ModernData targetValue);
-//     int printList();
-//     int listLength();
+    void destroyList();
+    int addFirst(classNodeVariant* newNodePtr);
+    int addLast(classNodeVariant* newNodePtr);
+    int deleteFirst();
+    int deleteLast();
+    int deleteValue(ModernData targetValue);
+    int printList();
+    int listLength();
 };
 
 #endif

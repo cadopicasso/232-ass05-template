@@ -27,7 +27,7 @@ std::string printLegacyData(LegacyData data, char type) {
         case 'd':
             return std::format("{}",data.d);
         case 'c':
-            if (data.cPtr=NULL){
+            if (data.cPtr==nullptr){
                 return "nullptr";
             }
             return std::format("{}",data.cPtr);
@@ -61,7 +61,7 @@ structNode* createTwoStructNodes() {
     structNode *node2Ptr = new structNode;
     LegacyData n2;
     n2.d=3.14;
-    initStructNode(node1Ptr,n2,'d');
+    initStructNode(node2Ptr,n2,'d');
 
     node1Ptr->nextPtr=node2Ptr;
     return node1Ptr;
@@ -76,14 +76,24 @@ structNode* createTwoStructNodes() {
 
 // uncomment the following code to implement the classNode constructor
 
-// classNode::classNode(LegacyData val, char type) {
-//     // TODO: Assign value, typeData, and set nextPtr to nullptr
-// }
+classNode::classNode(LegacyData val, char type) {
+    this->value=val;
+    this->typeData=type;
+    this->nextPtr=nullptr;
+ }
 
 /// Dynamically allocates two classNodes (int 5, double 3.14) and links them.
 classNode* createTwoClassNodes() {
-    // TODO: Allocate dynamically, link nodes, and return head
-    return nullptr;
+    LegacyData n1;
+    n1.i=5;
+    classNode* head = new classNode(n1, 'i');
+    LegacyData n2;
+    n2.d=3.14;
+    classNode* node2 = new classNode(n2, 'd');
+
+    head->nextPtr=node2;
+
+    return head;
 }
 
 // ============================================================
@@ -92,8 +102,10 @@ classNode* createTwoClassNodes() {
 
 /// Dynamically allocates two classNodeT<int> objects (int 5, int 3) and links them.
 classNodeT<int>* createTwoTemplateNodes() {
-    // TODO: Instantiate classNodeT<int> nodes using new, link them, and return head
-    return nullptr;
+    classNodeT<int>* head= new classNodeT<int>(5);
+    classNodeT<int>* node2= new classNodeT<int>(3);
+    head->nextPtr=node2;
+    return head;
 }
 
 // ============================================================
@@ -102,58 +114,169 @@ classNodeT<int>* createTwoTemplateNodes() {
 
 // uncomment the following code to implement the LinkedList methods
 
-// LinkedList::LinkedList() {
-//     // TODO: Initialize headPtr to nullptr and counter to 0
-// }
+LinkedList::LinkedList() {
+    //TODO: Initialize headPtr to nullptr and counter to 0
+    this->headPtr=nullptr;
+    this->counter=0;
+}
 
-// LinkedList::~LinkedList() {
+LinkedList::~LinkedList() {
 //     // TODO: Clean up memory by calling destroyList()
-// }
+    destroyList();
+}
 //uncoment the following code to implement the LinkedList methods
 
-// void LinkedList::destroyList() {
+void LinkedList::destroyList() {
 //     // TODO: Iterate through list, delete all nodes, and reset counter to 0
-// }
+    classNodeVariant* current=headPtr;
+    while (current!=nullptr)
+    {
+        classNodeVariant* next=current->nextPtr;
+        free(current);
+        current=next;
+    }
 
-// int LinkedList::addFirst(classNodeVariant* newNodePtr) {
+    this->counter=0;
+    
+}
+
+int LinkedList::addFirst(classNodeVariant* newNodePtr) {
 //     // TODO: Prepend node to the front of list, increment counter
 //     // Return -1 if newNodePtr is nullptr, 0 on success
-//     return -1;
-// }
+    if (newNodePtr==nullptr){
+        return -1;
+    }
+    newNodePtr->nextPtr=this->headPtr;
+    this->headPtr=newNodePtr;
+    this->counter+=1;
 
-// int LinkedList::addLast(classNodeVariant* newNodePtr) {
+    return 0;
+}
+
+int LinkedList::addLast(classNodeVariant* newNodePtr) {
 //     // TODO: Append node to the end of list, increment counter
 //     // Return -1 if newNodePtr is nullptr, 0 on success
-//     return -1;
-// }
+    if (newNodePtr==nullptr){
+        return -1;
+    }
+    classNodeVariant* current=headPtr;
+    if (current==nullptr){
+        this->headPtr=newNodePtr;
+        this->counter+=1;
+        return 0;
+    }
+    while (current->nextPtr!=nullptr)
+    {
+        current=current->nextPtr;
+    }
+    current->nextPtr=newNodePtr;
+    this->counter+=1;
+    return 0;
+}
 
-// int LinkedList::deleteFirst() {
+int LinkedList::deleteFirst() {
 //     // TODO: Delete first node, update headPtr, decrement counter
 //     // Return -1 if list is empty, 0 on success
-//     return -1;
-// }
+    if (this->headPtr==nullptr){
+        return -1;
+    }
 
-// int LinkedList::deleteLast() {
+    classNodeVariant* storedFirst=this->headPtr;
+
+    this->headPtr=storedFirst->nextPtr;
+
+    free(storedFirst);
+
+    this->counter-=1;
+    
+    return 0;
+}
+
+int LinkedList::deleteLast() {
 //     // TODO: Find second-to-last node, delete last node, decrement counter
 //     // Return -1 if list is empty, 0 on success
-//     return -1;
-// }
+    if (this->headPtr==nullptr){
+        return -1;
+    }
+    classNodeVariant* secondToLast=this->headPtr;
+    if (secondToLast->nextPtr!=NULL){
+        free(secondToLast);
+        this->counter-=1;
+        return 0;
+    }
+    while (secondToLast->nextPtr->nextPtr!=nullptr){
+        secondToLast=secondToLast->nextPtr;
+    }
 
-// int LinkedList::deleteValue(ModernData targetValue) {
+    free(secondToLast->nextPtr);
+
+    secondToLast->nextPtr=nullptr;
+
+    this->counter-=1;
+
+    return 0;
+}
+
+int LinkedList::deleteValue(ModernData targetValue) {
 //     // TODO: Traverse list, find node matching targetValue, unlink and delete it
 //     // Decrement counter
 //     // Return 0 if found and removed, -1 if not found or list is empty
-//     return -1;
-// }
 
-// int LinkedList::printList() {
+    classNodeVariant* currentNode=this->headPtr;
+    classNodeVariant* previousNode;
+
+    if (currentNode==nullptr){
+        return -1;
+    }
+
+    while(currentNode->value!=targetValue){
+        if (currentNode->nextPtr==nullptr){
+            return -1;
+        }
+        previousNode=currentNode;
+        currentNode=currentNode->nextPtr;
+    }
+
+    previousNode->nextPtr=currentNode->nextPtr;
+
+    this->counter-=1;
+
+    free(currentNode);
+
+    return 0;
+}
+#include <cassert>
+int LinkedList::printList() {
 //     // TODO: Iterate through list and print each variant value to std::cout
 //     // Use std::holds_alternative or std::get
 //     // Return -1 if list is empty, 0 on success
-//     return -1;
-// }
+    if (this->headPtr==nullptr){
+        return -1;
+    } 
+    
+    classNodeVariant* currentNode=this->headPtr;
 
-// int LinkedList::listLength() {
+    while (currentNode!=nullptr)
+    {
+        if (std::holds_alternative<int>(currentNode->value)){
+            std::cout<<std::get<int>(currentNode->value)<<std::endl;
+        }
+        else if (std::holds_alternative<double>(currentNode->value))
+        {
+            std::cout<<std::get<double>(currentNode->value)<<std::endl;
+        }
+        else if (std::holds_alternative<std::string>(currentNode->value))
+        {
+            std::cout<<std::get<std::string>(currentNode->value)<<std::endl;
+        }
+        
+        currentNode=currentNode->nextPtr;
+    }
+
+    return 0;
+}
+
+int LinkedList::listLength() {
 //     // TODO: Return node count
-//     return 0;
-// }
+    return this->counter;
+}

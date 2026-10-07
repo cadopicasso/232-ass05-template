@@ -39,9 +39,10 @@ void test_printLegacyData_double(void)
 void test_createTwoStructNodes_links_correctly(void) 
 {
     structNode* head=createTwoStructNodes();
-    std::cout<<printLegacyData(head->value,'i')<<std::endl;
-    TEST_ASSERT_TRUE_MESSAGE(printLegacyData(head->value,'i')=="1", "Failed test_createTwoStructNodes_links_correctly Test 1");
+    TEST_ASSERT_TRUE_MESSAGE(printLegacyData(head->value,'i')=="5", "Failed test_createTwoStructNodes_links_correctly Test 1");
     TEST_ASSERT_TRUE_MESSAGE(printLegacyData(head->nextPtr->value,'d')=="3.14", "Failed test_createTwoStructNodes_links_correctly Test 2");
+    free(head->nextPtr);
+    free(head);
 }
 
 // ============================================================
@@ -53,7 +54,11 @@ void test_createTwoStructNodes_links_correctly(void)
 /// Clean up allocated memory.
 void test_createTwoClassNodes_links_correctly(void) 
 {
-    TEST_ASSERT_TRUE_MESSAGE(0, "TODO: Implement this test");
+    classNode* head=createTwoClassNodes();
+    TEST_ASSERT_TRUE_MESSAGE(printLegacyData(head->value,'i')=="5", "Failed test_createTwoClassNodes_links_correctly Test 1");
+    TEST_ASSERT_TRUE_MESSAGE(printLegacyData(head->nextPtr->value,'d')=="3.14", "Failed test_createTwoClassNodes_links_correctly Test 2");
+    free(head->nextPtr);
+    free(head);
 }
 
 // ============================================================
@@ -65,7 +70,11 @@ void test_createTwoClassNodes_links_correctly(void)
 /// Clean up allocated memory.
 void test_createTwoTemplateNodes_links_correctly(void) 
 {
-    TEST_ASSERT_TRUE_MESSAGE(0, "TODO: Implement this test");
+    classNodeT<int>* head=createTwoTemplateNodes();
+    TEST_ASSERT_TRUE_MESSAGE(head->value==5, "Failed test_createTwoTemplateNodes_links_correctly Test 1");
+    TEST_ASSERT_TRUE_MESSAGE(head->nextPtr->value==3, "Failed test_createTwoTemplateNodes_links_correctly Test 2");
+    free(head->nextPtr);
+    free(head);
 }
 
 // ============================================================
@@ -76,14 +85,37 @@ void test_createTwoTemplateNodes_links_correctly(void)
 /// Verify listLength() returns 2 after insertions.
 void test_linkedList_addFirst_updates_counter(void) 
 {
-    TEST_ASSERT_TRUE_MESSAGE(0, "TODO: Implement this test");
+
+    LinkedList linked=LinkedList();
+
+    ModernData m1 = 1;
+    classNodeVariant* n1 = new classNodeVariant(m1);
+    linked.addFirst(n1);
+
+    ModernData m2 = 2;
+    classNodeVariant* n2 = new classNodeVariant(m2);
+    linked.addFirst(n2);
+
+    TEST_ASSERT_TRUE_MESSAGE(linked.listLength()==2, "Failed test_linkedList_addFirst_updates_counter");
 }
 
 /// Create a LinkedList. Add nodes (10, then 20) using addLast.
 /// Capture std::cout and verify elements appear in order ("10" before "20").
 void test_linkedList_addLast_places_at_end(void) 
 {
-    TEST_ASSERT_TRUE_MESSAGE(0, "TODO: Implement this test");
+    LinkedList linked=LinkedList();
+
+    ModernData m1 = 10;
+    classNodeVariant* n1 = new classNodeVariant(m1);
+    linked.addLast(n1);
+
+    ModernData m2 = 20;
+    classNodeVariant* n2 = new classNodeVariant(m2);
+    linked.addLast(n2);
+
+    linked.printList();
+
+    TEST_ASSERT_TRUE_MESSAGE(false, "I dont know how to capture cout");
 }
 
 /// Create a LinkedList with an int, double, and string.
@@ -91,7 +123,30 @@ void test_linkedList_addLast_places_at_end(void)
 /// Verify list length decreases to 2 and second call returns -1.
 void test_linkedList_deleteValue_removes_variant(void) 
 {
-    TEST_ASSERT_TRUE_MESSAGE(0, "TODO: Implement this test");
+    LinkedList linked=LinkedList();
+
+    ModernData m1 = 10;
+    classNodeVariant* n1 = new classNodeVariant(m1);
+    linked.addLast(n1);
+
+    ModernData m2 = 3.14;
+    classNodeVariant* n2 = new classNodeVariant(m2);
+    linked.addLast(n2);
+
+    ModernData m3 = "goober";
+    classNodeVariant* n3 = new classNodeVariant(m3);
+    linked.addLast(n3);
+
+    linked.printList();
+
+    int test=linked.deleteValue(3.14);
+
+    linked.printList();
+
+    std::cout<<test<<std::endl;
+
+    TEST_ASSERT_TRUE_MESSAGE(test==0, "Failed test_linkedList_deleteValue_removes_variant Test 1");
+    TEST_ASSERT_TRUE_MESSAGE(linked.listLength()==2, "Failed test_linkedList_deleteValue_removes_variant Test 2");
 }
 
 /// Create a LinkedList and insert three nodes.
